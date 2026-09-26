@@ -28,7 +28,7 @@ auto-load karti hai. Is file mein reviews daalne ke 3 tareeke:
 1. **APIs & Services → Credentials → Create Credentials → API key**.
 2. Key copy kar lein.
 3. Usi key par **Restrict key** karein:
-   - **Application restrictions**: *HTTP referrers* → add karein `https://akconstructionhomedesign.com/*` aur `http://localhost/*` (local test ke liye).
+   - **Application restrictions**: *HTTP referrers* → add karein `https://akconstructionandhomedesign.com/*` aur `http://localhost/*` (local test ke liye).
    - **API restrictions**: *Restrict key* → select karein sirf **Places API (New)**.
 4. Save. Yeh zaruri hai — warna koi bhi aapki key chura kar use kar sakta hai.
 

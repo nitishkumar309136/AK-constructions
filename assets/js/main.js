@@ -29,10 +29,13 @@
         i.classList.remove('open');
         var ans = i.querySelector('.faq-a');
         if (ans) ans.style.maxHeight = null;
+        var btn = i.querySelector('.faq-q');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
       });
       if (!isOpen) {
         item.classList.add('open');
         a.style.maxHeight = a.scrollHeight + 'px';
+        q.setAttribute('aria-expanded', 'true');
       }
     });
   });
@@ -41,9 +44,13 @@
   document.querySelectorAll('.tab-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var target = btn.getAttribute('data-tab');
-      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function (b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
       document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
       btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
       var panel = document.getElementById(target);
       if (panel) panel.classList.add('active');
     });
@@ -75,8 +82,12 @@
 
     tierBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        tierBtns.forEach(function (b) { b.classList.remove('active'); });
+        tierBtns.forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
         currentRate = parseFloat(btn.getAttribute('data-rate'));
         calcCost();
       });
@@ -156,7 +167,7 @@
         '<p>Apne recent customers se Google par review likhwane ke liye, unhe yeh short link bhejein: apna review likhne ka link Contact page par milta hai.</p></div>';
     }
 
-    fetch('assets/data/reviews.json', { cache: 'no-store' })
+    fetch('/assets/data/reviews.json', { cache: 'no-store' })
       .then(function (res) { return res.json(); })
       .then(function (data) {
         var items = (data && Array.isArray(data.reviews)) ? data.reviews : [];
@@ -199,6 +210,157 @@
     prevBtn.addEventListener('click', function () { goTo(idx - 1); });
     nextBtn.addEventListener('click', function () { goTo(idx + 1); });
     render();
+  }
+
+  /* ===== Home hero: full-screen auto slider ===== */
+  var heroSlides = document.getElementById('heroSlides');
+  if (heroSlides) {
+    var hSlides = heroSlides.querySelectorAll('.hs-slide');
+    var hDotsWrap = document.getElementById('heroDots');
+    var hCaption = document.getElementById('heroCaption');
+    var hPause = document.getElementById('heroPause');
+    var hIdx = 0, hTimer = null, hDots = [];
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var userPaused = reduceMotion; // respect reduced-motion: no autoplay
+
+    hSlides.forEach(function (_, i) {
+      var d = document.createElement('button');
+      d.type = 'button';
+      d.setAttribute('aria-label', 'Photo ' + (i + 1));
+      d.addEventListener('click', function () { heroGo(i); restart(); });
+      hDotsWrap.appendChild(d);
+      hDots.push(d);
+    });
+
+    function heroGo(i) {
+      hIdx = (i + hSlides.length) % hSlides.length;
+      hSlides.forEach(function (s, j) { s.classList.toggle('active', j === hIdx); });
+      hDots.forEach(function (d, j) { d.classList.toggle('active', j === hIdx); });
+      if (hCaption) hCaption.textContent = hSlides[hIdx].getAttribute('data-caption') || '';
+    }
+    function stop() { clearInterval(hTimer); hTimer = null; }
+    function start() { stop(); if (!userPaused) hTimer = setInterval(function () { heroGo(hIdx + 1); }, 5000); }
+    function restart() { if (hTimer) start(); }
+
+    document.getElementById('heroPrev').addEventListener('click', function () { heroGo(hIdx - 1); restart(); });
+    document.getElementById('heroNext').addEventListener('click', function () { heroGo(hIdx + 1); restart(); });
+    hPause.addEventListener('click', function () {
+      userPaused = !userPaused;
+      hPause.setAttribute('aria-pressed', userPaused ? 'true' : 'false');
+      hPause.setAttribute('aria-label', userPaused ? 'Slideshow chalayein' : 'Slideshow rokein');
+      hPause.innerHTML = userPaused ? '&#9654;' : '&#10074;&#10074;';
+      userPaused ? stop() : start();
+    });
+    if (reduceMotion) {
+      hPause.setAttribute('aria-pressed', 'true');
+      hPause.innerHTML = '&#9654;';
+    }
+
+    // swipe on phones
+    var touchX = null;
+    heroSlides.parentNode.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+    heroSlides.parentNode.addEventListener('touchend', function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 45) { heroGo(hIdx + (dx < 0 ? 1 : -1)); restart(); }
+      touchX = null;
+    });
+    // don't cycle in a background tab
+    document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
+
+    heroGo(0);
+    start();
+  }
+
+  /* ===== Lightbox for gallery photos ===== */
+  var lbLinks = Array.prototype.slice.call(document.querySelectorAll('a.lb'));
+  if (lbLinks.length) {
+    var lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.setAttribute('role', 'dialog');
+    lb.setAttribute('aria-modal', 'true');
+    lb.innerHTML = '<img alt=""><div class="lb-cap"></div>' +
+      '<button type="button" class="lb-close" aria-label="Band karein">&times;</button>' +
+      '<button type="button" class="lb-prev" aria-label="Pichhli photo">&#8249;</button>' +
+      '<button type="button" class="lb-next" aria-label="Agli photo">&#8250;</button>';
+    document.body.appendChild(lb);
+    var lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.lb-cap');
+    var lbGroup = [], lbIdx = 0, lbReturn = null;
+
+    function lbShow(i) {
+      lbIdx = (i + lbGroup.length) % lbGroup.length;
+      var a = lbGroup[lbIdx];
+      lbImg.src = a.getAttribute('href');
+      lbImg.alt = a.getAttribute('data-caption') || '';
+      lbCap.textContent = a.getAttribute('data-caption') || '';
+    }
+    function lbClose() {
+      lb.classList.remove('open');
+      lbImg.removeAttribute('src');
+      if (lbReturn) lbReturn.focus();
+    }
+
+    lbLinks.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        // browse only the photos in the same grid (e.g. the open project tab)
+        var grid = a.closest('.gallery-grid') || document;
+        lbGroup = Array.prototype.slice.call(grid.querySelectorAll('a.lb'));
+        lbReturn = a;
+        lbShow(lbGroup.indexOf(a));
+        lb.classList.add('open');
+        lb.querySelector('.lb-close').focus();
+      });
+    });
+    lb.querySelector('.lb-close').addEventListener('click', lbClose);
+    lb.querySelector('.lb-prev').addEventListener('click', function () { lbShow(lbIdx - 1); });
+    lb.querySelector('.lb-next').addEventListener('click', function () { lbShow(lbIdx + 1); });
+    lb.addEventListener('click', function (e) { if (e.target === lb) lbClose(); });
+    document.addEventListener('keydown', function (e) {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') lbClose();
+      else if (e.key === 'ArrowLeft') lbShow(lbIdx - 1);
+      else if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
+    });
+  }
+
+  /* ===== Plot area converter (dhur / katha / decimal -> sq ft) ===== */
+  var convValue = document.getElementById('convValue');
+  var convUnit = document.getElementById('convUnit');
+  if (convValue && convUnit) {
+    // Common Bihar land units, in sq ft (katha size varies by district)
+    var UNIT_SQFT = { sqft: 1, sqm: 10.7639, dhur: 68.0625, katha: 1361.25, decimal: 435.6, bigha: 27225 };
+    var plotCards = document.querySelectorAll('.plot-card[data-area]');
+    var convMatch = document.getElementById('convMatch');
+    var convMatchLink = document.getElementById('convMatchLink');
+
+    function fmt(n) {
+      return n.toLocaleString('en-IN', { maximumFractionDigits: n < 10 ? 2 : 1 });
+    }
+
+    function convert() {
+      var sqft = (parseFloat(convValue.value) || 0) * (UNIT_SQFT[convUnit.value] || 1);
+      document.querySelectorAll('[data-conv]').forEach(function (el) {
+        el.textContent = fmt(sqft / UNIT_SQFT[el.getAttribute('data-conv')]);
+      });
+
+      var best = null;
+      plotCards.forEach(function (card) {
+        card.classList.remove('match');
+        var diff = Math.abs(parseFloat(card.getAttribute('data-area')) - sqft);
+        if (!best || diff < best.diff) best = { card: card, diff: diff };
+      });
+      if (!convMatch || !best) return;
+      if (sqft <= 0) { convMatch.hidden = true; return; }
+      best.card.classList.add('match');
+      convMatchLink.href = best.card.getAttribute('href');
+      convMatchLink.textContent = best.card.querySelector('.dims').textContent;
+      convMatch.hidden = false;
+    }
+
+    convValue.addEventListener('input', convert);
+    convUnit.addEventListener('change', convert);
+    convert();
   }
 
   /* ===== Contact form (front-end only; opens WhatsApp with details) ===== */

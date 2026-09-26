@@ -1,12 +1,13 @@
-Yahan images daalein (ya yun hi chhod dein — site bina photos ke bhi sahi dikhegi,
-placeholder labels dikhte rahenge jab tak photo na ho).
+Website par dikhne wali photos (WebP = site ke liye; .jpeg = aapke originals):
 
-Photo names:
-  project-1.jpg   — Exterior 3D render (Google Site wali)
-  project-2.jpg   — 2D naksha plan
-  project-3.jpg   — Living room interior render
-  project-4.jpg   — Bedroom interior render
-  og-cover.jpg    — Social share / JSON-LD image (1200x630 recommended, exterior render chalega)
-  ongoing-1.jpg … ongoing-8.jpg — Under-construction site photos (projects.html ke slots)
+  renders/            exterior_*, interior_*, bedroom_*  (3D designs)
+                      har photo ke 2 size: name.webp (1600px) + name-800.webp (mobile/grid)
+  under_construction/ chalu site photos: name.webp (900px) + name-600.webp
+  site_comparison     Design vs Reality (projects page)
+  maps/               sample naksha (home page)
+  logo.jpg            naya full logo (Google/schema) · logo-icon.webp = header · logo-full-240.webp = footer
+  og-cover.jpg        WhatsApp/Facebook share image (1200x630, exterior_1 se bana)
 
-Size tip: 800-1200px wide, JPG, har photo 300KB se kam rakhein taaki site fast rahe.
+Nayi photo add karni ho to: original .jpeg isi folder mein rakhein aur Claude se
+"optimize karke website par lagao" bolein — ya squoosh.app par WebP (quality ~75) bana lein.
+Home page ka full-screen slider: index.html mein <section class="hero-slider"> ke andar.

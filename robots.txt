@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://akconstructionhomedesign.com/sitemap.xml
+Sitemap: https://akconstructionandhomedesign.com/sitemap.xml

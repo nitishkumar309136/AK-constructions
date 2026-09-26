@@ -18,7 +18,7 @@ https://tinyurl.com/4sn3bjbs
       "Since 2020", "GST registered". Keyword natural tarike se 2-3 baar (no stuffing).
 - [ ] **Service areas:** Begusarai, Samastipur, Khagaria, Munger, Lakhisarai, Mokama, Patna
       (Profile → Edit → Location & areas)
-- [ ] **Phone/WhatsApp/Website:** Website = https://akconstructionhomedesign.com
+- [ ] **Phone/WhatsApp/Website:** Website = https://akconstructionandhomedesign.com
 - [ ] **Opening hours** correct karein (agar abhi missing hain)
 - [ ] **Photos:** Justdial ki 47 photos mein se 15-20 best photos Google par bhi upload karein
       (logo, office photo, team photo, project renders). Photo title mein location daalein.
@@ -57,7 +57,7 @@ utna bharosa:
 - [ ] **Justdial** — dono listings verify karein (Milan Chawk/Subhash Nagar + Suhird Nagar).
       Same naam: "AK Construction", same phone +91 87704 18045, website add karein
 - [ ] **Sulekha, IndiaMART, Angdesh, Facebook** — free listing ya profile complete karein
-      (Facebook par website link add karein: akconstructionhomedesign.com)
+      (Facebook par website link add karein: akconstructionandhomedesign.com)
 - [ ] **Website → Business Profile link** (already done — footer aur contact par maps link hai)
 - [ ] Website ke footer ka address = Google profile ka address (already match: Milan Chowk,
       Begusarai)
