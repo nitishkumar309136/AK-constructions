@@ -807,14 +807,29 @@ html[lang="hi"] .eyebrow{ letter-spacing:0.04em; }
 .hs-dots{ display:flex; gap:7px; }
 .hs-dots button{ width:9px; height:9px; border-radius:50%; border:1px solid var(--ochre); background:rgba(9,28,51,0.4); padding:0; }
 .hs-dots button.active{ background:var(--ochre); width:24px; border-radius:999px; }
+/* Phones/tablets: the whole photo is shown (no crop, no dark overlay) in a panel
+   above the text; a blurred copy of the same photo fills any empty space. */
 @media (max-width:920px){
-  .hs-shade{ background:linear-gradient(0deg, rgba(9,28,51,0.92) 0%, rgba(9,28,51,0.55) 55%, rgba(9,28,51,0.35) 100%); }
-  .hs-content{ padding-top:40px; padding-bottom:110px; }
+  .hero-slider{ display:block; min-height:0; --hs-h:min(78vw, 62svh); }
+  .hs-slides{ position:relative; height:var(--hs-h); overflow:hidden; }
+  .hs-slide::before{
+    content:""; position:absolute; inset:-40px;
+    background:var(--bg) center/cover no-repeat;
+    filter:blur(24px) brightness(0.6);
+  }
+  .hs-slide img{ position:relative; object-fit:contain; transform:none; }
+  .hs-slide.active img{ animation:none; }
+  .hs-shade{ display:none; }
+  .hs-content{ padding-top:30px; padding-bottom:40px; }
+  .hs-content h1{ text-shadow:none; }
   .hs-content .lede{ font-size:16px; }
+  .hs-controls{ top:calc(var(--hs-h) - 50px); bottom:auto; }
+  .hs-caption{ font-size:10.5px; padding:5px 10px; }
 }
 @media (max-width:600px){
   .hs-caption{ display:none; }
-  .hs-controls{ justify-content:center; bottom:16px; }
+  .hs-controls{ justify-content:center; }
+  .hs-btn{ width:36px; height:36px; }
   .hs-dots button{ width:8px; height:8px; }
 }
 @media (prefers-reduced-motion: reduce){ .hs-slide.active img{ animation:none; } }
