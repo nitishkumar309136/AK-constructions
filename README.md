@@ -12,7 +12,7 @@ No build tool — sab pages ready-to-deploy HTML hain.
 - Locality pages (14): barauni-bihat, teghra-, bachhwara-, bakhri-, manjhaul-, balia-begusarai · alauli-, parbatta-, mansi-, haripur-khagaria · singhia-, bithan-, dalsinghsarai-, rosera-samastipur
 - Hindi (Devanagari): hi/index.html · hi/ghar-ka-naksha.html (hreflang se English pages se jude hain)
 
-**CSS/JS badalne par** sabhi pages mein `style.css?v=N (abhi v=6)` / `main.js?v=N` ka number badhayein — browser cache 1 saal ka hai.
+**CSS/JS badalne par** sabhi pages mein `style.css?v=N (abhi v=8)` / `main.js?v=N` ka number badhayein — browser cache 1 saal ka hai.
 
 ## Local preview
 ```
