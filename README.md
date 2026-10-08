@@ -8,17 +8,21 @@ No build tool — sab pages ready-to-deploy HTML hain.
 - 7 city pages: begusarai · samastipur · khagaria · patna · mokama · lakhisarai · munger
 - Naksha hub (dhur/katha converter): house-naksha.html
 - 6 plot-size pages: 20x40 · 25x50 · 30x40 · 30x50 · 40x50 · 50x60 (`*-house-naksha.html`)
+- Architect page: architect-in-begusarai.html
+- Locality pages (14): barauni-bihat, teghra-, bachhwara-, bakhri-, manjhaul-, balia-begusarai · alauli-, parbatta-, mansi-, haripur-khagaria · singhia-, bithan-, dalsinghsarai-, rosera-samastipur
 - Hindi (Devanagari): hi/index.html · hi/ghar-ka-naksha.html (hreflang se English pages se jude hain)
 
 **CSS/JS badalne par** sabhi pages mein `style.css?v=N (abhi v=6)` / `main.js?v=N` ka number badhayein — browser cache 1 saal ka hai.
 
 ## Local preview
 ```
-python -m http.server 8000
+python tools/serve.py
 ```
-phir http://localhost:8000 kholen (reviews loader file:// par nahi chalta).
+phir http://localhost:8000 kholen. (Yeh server Cloudflare jaisa hai: `/patna` → `patna.html`. Saare links bina `.html` ke hain.)
 
-## Deploy (Netlify) — poora guide: DEPLOY-GUIDE.md
+## Deploy (Cloudflare Pages) — poora guide: DEPLOY-GUIDE.md
+
+**Naya page banayein to:** links bina `.html` ke likhein (`/patna`), canonical bhi bina `.html`, aur `sitemap.xml` + `_redirects` mein entry jodein.
 1. Ye folder GitHub par push karein
 2. Netlify → New site from Git → repo select karein (build command khaali chhod dein)
 3. Domain: akconstructionandhomedesign.com

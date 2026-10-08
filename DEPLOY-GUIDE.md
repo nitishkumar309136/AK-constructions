@@ -3,6 +3,16 @@
 Hosting **free** hai (Netlify free plan). Sirf domain ka kharcha lagta hai, jo aap pehle hi de chuke hain.
 Total time: ~30 minute kaam + DNS update hone mein 1–24 ghante.
 
+> **Aapki site Cloudflare Pages par live hai** (Netlify par nahi). Neeche ke Netlify steps sirf reference ke liye hain —
+> Cloudflare ke zaroori settings yeh hain:
+>
+> 1. **Always Use HTTPS:** Cloudflare dashboard → apna domain → **SSL/TLS → Edge Certificates → Always Use HTTPS = On**
+> 2. **www jodein:** Workers & Pages → apna project → **Custom domains → Set up a domain** → `www.akconstructionandhomedesign.com`
+> 3. **www → bina-www redirect:** domain → **Rules → Redirect Rules → Create rule** → "Redirect from WWW to root" template
+>    (Hostname equals `www.akconstructionandhomedesign.com` → `https://akconstructionandhomedesign.com` + path, **301**, preserve query string)
+> 4. Har `git push` ke baad Cloudflare apne-aap naya version deploy karta hai (Workers & Pages → Deployments mein dikhega).
+> 5. `_redirects` (purane `.html` links → naye links, 301) aur `_headers` (cache) files Cloudflare khud padhta hai. `netlify.toml` Cloudflare par kaam nahi karta.
+
 ---
 
 ## Step 1 — Code GitHub par push karein
