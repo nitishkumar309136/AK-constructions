@@ -1,4 +1,4 @@
-# Old .html addresses -> clean addresses (Cloudflare Pages serves pages without .html)
+# Old .html addresses -> clean addresses (Cloudflare serves pages without .html)
 /index.html / 301
 /hi/index.html /hi/ 301
 /home / 301
@@ -17,11 +17,13 @@
 /barauni-bihat.html /barauni-bihat 301
 /begusarai.html /begusarai 301
 /bithan-samastipur.html /bithan-samastipur 301
+/civil-engineer-begusarai.html /civil-engineer-begusarai 301
 /contact.html /contact 301
 /dalsinghsarai-samastipur.html /dalsinghsarai-samastipur 301
 /haripur-khagaria.html /haripur-khagaria 301
 /hi/ghar-ka-naksha.html /hi/ghar-ka-naksha 301
 /house-naksha.html /house-naksha 301
+/interior-designer-begusarai.html /interior-designer-begusarai 301
 /khagaria.html /khagaria 301
 /lakhisarai.html /lakhisarai 301
 /loan.html /loan 301

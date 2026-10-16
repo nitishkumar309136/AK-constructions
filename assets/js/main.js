@@ -232,8 +232,27 @@
       hDots.push(d);
     });
 
+    // Slides after the first carry data-src/data-srcset and load only when they are
+    // about to be shown; the blurred phone backdrop (--bg) uses the small 800px file.
+    function prepare(i) {
+      var slide = hSlides[(i + hSlides.length) % hSlides.length];
+      var img = slide.querySelector('img');
+      if (img.getAttribute('data-src')) {
+        if (img.getAttribute('data-srcset')) img.srcset = img.getAttribute('data-srcset');
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+        img.removeAttribute('data-srcset');
+      }
+      if (!slide.style.getPropertyValue('--bg')) {
+        var small = (img.getAttribute('srcset') || img.getAttribute('src')).split(',')[0].trim().split(' ')[0];
+        slide.style.setProperty('--bg', 'url("' + small + '")');
+      }
+    }
+
     function heroGo(i) {
       hIdx = (i + hSlides.length) % hSlides.length;
+      prepare(hIdx);
+      prepare(hIdx + 1);
       hSlides.forEach(function (s, j) { s.classList.toggle('active', j === hIdx); });
       hDots.forEach(function (d, j) { d.classList.toggle('active', j === hIdx); });
       if (hCaption) hCaption.textContent = hSlides[hIdx].getAttribute('data-caption') || '';

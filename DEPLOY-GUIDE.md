@@ -94,7 +94,7 @@ Check karein: domain kholein, WhatsApp button, call button, cost calculator, aur
 ## Baad mein badlaav karna
 
 - Kisi bhi file mein badlaav → `git add -A && git commit -m "..." && git push` → 1 minute mein live.
-- **CSS ya JS badla ho** to sabhi pages mein `style.css?v=8` / `main.js?v=8` ka number badha dein (v=9…),
+- **CSS ya JS badla ho** to sabhi pages mein `style.css?v=9` / `main.js?v=9` ka number badha dein (v=10…),
   warna purane visitors ko purana design dikhega.
 
 ## Kuch galat ho to
